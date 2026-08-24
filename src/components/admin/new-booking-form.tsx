@@ -1,0 +1,18 @@
+'use client';
+
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { bookingSchema } from '@/lib/schemas';
+import { useBookings } from '@/components/admin/booking-store';
+import type { LeadRecord } from '@/lib/operations-repository';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+
+export function NewBookingForm({ sourceLead }: { sourceLead?: LeadRecord }) {
+  const router = useRouter(); const { createBooking } = useBookings(); const [error, setError] = useState(''); const [saving, setSaving] = useState(false);
+  async function submit(form: FormData) { const values = Object.fromEntries(form) as Record<string, string>; const result = bookingSchema.safeParse(values); if (!result.success) { setError(result.error.issues[0].message); return; } setSaving(true); try { const booking = await createBooking({ ...result.data, email: result.data.email || undefined, startAt: new Date(result.data.startAt).toISOString(), verified: false, status: 'Pending review', sourceLeadId: sourceLead?.id }); router.push(`/bookings/${booking.id}`); } catch { setError('Booking could not be created. Your entries are still here; try again.'); setSaving(false); } }
+  return <div className="space-y-5"><header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-muted-foreground">Manual booking intake</p><h1 className="mt-1 text-3xl font-bold tracking-tight">Create booking</h1><p className="mt-2 text-sm text-muted-foreground">{sourceLead ? `Converting qualified lead ${sourceLead.id}.` : 'This creates a local demo booking only.'} Backend confirmation is required in production.</p></div><Button asChild variant="outline"><Link href="/bookings">← Back</Link></Button></header><Card className="max-w-3xl"><CardHeader><CardTitle>Booking details</CardTitle></CardHeader><CardContent><form className="grid gap-5 sm:grid-cols-2" action={submit}><label className="grid gap-2 text-sm font-medium">Customer name<Input name="customer" defaultValue={sourceLead?.customer} required/></label><label className="grid gap-2 text-sm font-medium">Phone number<Input name="phone" required/></label><label className="grid gap-2 text-sm font-medium">Email <span className="font-normal text-muted-foreground">(optional)</span><Input name="email" type="email"/></label><label className="grid gap-2 text-sm font-medium">Property type<Input name="propertyType" placeholder="Home, apartment, commercial…" required/></label><label className="grid gap-2 text-sm font-medium">Service<Input name="service" defaultValue={sourceLead?.service} required/></label><label className="grid gap-2 text-sm font-medium">Requested time<Input name="startAt" type="datetime-local" required/></label><label className="grid gap-2 text-sm font-medium sm:col-span-2">Property address<Input name="address" defaultValue={sourceLead?.location} required/></label><label className="grid gap-2 text-sm font-medium sm:col-span-2">Work description<Textarea name="notes" defaultValue={sourceLead ? `Created from ${sourceLead.source}.` : ''} required rows={4}/></label>{error && <p className="sm:col-span-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</p>}<div className="sm:col-span-2"><Button disabled={saving}>{saving ? 'Creating…' : 'Create pending booking'}</Button></div></form></CardContent></Card></div>;
+}

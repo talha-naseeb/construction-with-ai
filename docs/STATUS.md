@@ -7,12 +7,12 @@
 
 | Area | Status | Evidence / next step |
 |---|---|---|
-| Sprint 01 — Booking and technician foundation | In progress | Typed booking and technician repositories, assignment flow, and build/test baseline exist. Complete the remaining acceptance checks and request client approval. |
-| Sprint 02 — Calls and leads | In progress | Calls list, typed local call data, call detail, transcript, outcome, and links to booking/lead queues are implemented. Lead qualification, loss reasons, filters, loading/empty/error states, and source-context conversion remain. |
-| Sprint 03 — Booking lifecycle | Not started | Start after Sprint 02 is accepted: lead → pending booking → confirmed booking → technician assignment. |
-| Sprint 04 — Customers, jobs, services | Started as UI lists | List pages exist with local typed data. Detail views, linked histories, forms, and status transitions remain. |
-| Sprint 05 — Dashboard and resilience | Not started | Existing dashboard needs API-ready mock derivation and full state coverage. |
-| Sprint 06 — Hardening and handoff | Not started | Begin only after core workflows are accepted. |
+| Sprint 01 — Booking and technician foundation | Ready for client test | Booking assignment, validation, lifecycle, and technician add/edit mock flows are implemented. |
+| Sprint 02 — Calls and leads | Ready for client test | Calls have search/outcome filters, detail review, and lead source-call links; lead qualification/loss is available in the mock UI. |
+| Sprint 03 — Booking lifecycle | Ready for client test | Lead prefill, booking create/edit/confirm/assign/complete/cancel, and assignment warnings are implemented. |
+| Sprint 04 — Customers, jobs, services | Ready for client test | Customer related history, job workflow/cancellation/notes, and controlled service catalogue views are implemented. |
+| Sprint 05 — Dashboard and resilience | Ready for client test | Dashboard, analytics, settings, security, not-found, and recovery views are available with explicit local-data boundaries. |
+| Sprint 06 — Hardening and handoff | Ready for client test | Shared UI migration, responsive work, automated checks, API contract, and Retell integration checklist are ready for review. |
 
 ## Completed in this session
 
@@ -21,12 +21,13 @@
 - Connected call review actions to the appropriate booking or lead queue.
 - Removed navigation links to routes that have no intentional destination.
 - Ran `npm run build` and `npm test` successfully after each implemented workflow.
+- Manual preview testing was completed by the client and the current code was pushed to `main`.
 
 ## Active next work
 
-1. Build lead detail and qualification/lost-reason actions.
-2. Preserve the source call when a qualified lead becomes a pending booking.
-3. Add the booking creation/edit flow with Zod validation and clear mock mutation feedback.
+1. Obtain explicit client approval for the frontend release candidate.
+2. Log any approval notes or follow-up fixes.
+3. Start backend work only after the client accepts the frontend release candidate.
 
 ## Approval rule
 

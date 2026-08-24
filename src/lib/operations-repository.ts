@@ -1,10 +1,10 @@
 export type CallOutcome = 'Booking created' | 'Lead created' | 'Resolved' | 'Failed';
 export type LeadStatus = 'New' | 'Follow-up due' | 'Qualified' | 'Lost';
-export type JobStatus = 'Site visit' | 'Quote pending' | 'Scheduled' | 'In progress' | 'Completed';
+export type JobStatus = 'Site visit' | 'Quote pending' | 'Scheduled' | 'In progress' | 'Completed' | 'Cancelled';
 export type ServiceState = 'Active' | 'Paused';
 
 export type CallRecord = { id: string; customer: string; phone: string; service: string; startedAt: string; duration: string; outcome: CallOutcome; verification: 'Recognized' | 'Not verified' | 'Step-up required'; summary: string; transcript: Array<{ speaker: 'Customer' | 'Retell'; text: string }> };
-export type LeadRecord = { id: string; customer: string; service: string; location: string; source: string; status: LeadStatus; followUp: string; owner: string };
+export type LeadRecord = { id: string; customer: string; service: string; location: string; source: string; sourceCallId?: string; status: LeadStatus; followUp: string; owner: string };
 export type JobRecord = { id: string; customer: string; service: string; technician: string; scheduledFor: string; status: JobStatus };
 export type ServiceRecord = { id: string; name: string; category: string; areas: string; bookingQuestions: number; state: ServiceState };
 export type CustomerRecord = { id: string; name: string; phone: string; email: string; verification: 'Level 0' | 'Level 1' | 'Level 2'; activeWork: string; lastContact: string };
@@ -16,7 +16,7 @@ const calls: CallRecord[] = [
   { id: 'call-1045', customer: 'Sarah Thompson', phone: '(214) 555-0177', service: 'Roof inspection', startedAt: 'Today · 08:33 AM', duration: '02:11', outcome: 'Failed', verification: 'Step-up required', summary: 'Caller requested an address change; verification was not completed.', transcript: [{ speaker: 'Customer', text: 'I need to change the address for my roof inspection.' }, { speaker: 'Retell', text: 'To change an address, please complete a secure verification step.' }] }
 ];
 const leads: LeadRecord[] = [
-  { id: 'lead-201', customer: 'Owen Wright', service: 'Swimming pool installation', location: 'Austin, TX', source: 'Inbound AI call', status: 'Follow-up due', followUp: 'Today · 2:00 PM', owner: 'Aisha Khan' },
+  { id: 'lead-201', customer: 'Owen Wright', service: 'Swimming pool installation', location: 'Austin, TX', source: 'Inbound AI call', sourceCallId: 'call-1046', status: 'Follow-up due', followUp: 'Today · 2:00 PM', owner: 'Aisha Khan' },
   { id: 'lead-200', customer: 'Priya Shah', service: 'Exterior painting', location: 'Round Rock, TX', source: 'Website callback', status: 'New', followUp: 'Tomorrow', owner: 'Unassigned' },
   { id: 'lead-199', customer: 'Eric Cole', service: 'Foundation repair', location: 'Leander, TX', source: 'Inbound AI call', status: 'Qualified', followUp: 'Thu, May 22', owner: 'Aisha Khan' }
 ];

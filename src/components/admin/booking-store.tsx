@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { bookingRepository } from '@/lib/repositories/booking-repository';
 import { technicianRepository } from '@/lib/repositories/technician-repository';
-import type { Booking, Technician } from '@/lib/types';
+import type { Booking, BookingStatus, Technician } from '@/lib/types';
 
 type BookingContextValue = {
   bookings: Booking[];
@@ -15,6 +15,11 @@ type BookingContextValue = {
   retry: () => Promise<void>;
   assignTechnician: (bookingId: string, technicianId: string) => Promise<void>;
   createBooking: (input: Omit<Booking, 'id' | 'endAt' | 'timezone'>) => Promise<Booking>;
+  cancelBooking: (bookingId: string, reason: string) => Promise<void>;
+  transitionBooking: (bookingId: string, status: BookingStatus) => Promise<void>;
+  updateBooking: (bookingId: string, input: Partial<Pick<Booking, 'customer' | 'phone' | 'email' | 'service' | 'address' | 'propertyType' | 'startAt' | 'notes'>>) => Promise<Booking>;
+  createTechnician: (input: Omit<Technician, 'id' | 'initials' | 'currentLoad'>) => Promise<Technician>;
+  updateTechnician: (id: string, input: Omit<Technician, 'id' | 'initials' | 'currentLoad'>) => Promise<Technician>;
   technicianName: (technicianId?: string) => string;
 };
 const BookingContext = createContext<BookingContextValue | null>(null);
@@ -61,11 +66,34 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     setBookings((current) => [booking, ...current]);
     return booking;
   }
+  async function cancelBooking(bookingId: string, reason: string) {
+    const booking = await bookingRepository.cancel(bookingId, reason);
+    setBookings((current) => current.map((item) => item.id === booking.id ? booking : item));
+  }
+  async function transitionBooking(bookingId: string, status: BookingStatus) {
+    const booking = await bookingRepository.transition(bookingId, status);
+    setBookings((current) => current.map((item) => item.id === booking.id ? booking : item));
+  }
+  async function updateBooking(bookingId: string, input: Partial<Pick<Booking, 'customer' | 'phone' | 'email' | 'service' | 'address' | 'propertyType' | 'startAt' | 'notes'>>) {
+    const booking = await bookingRepository.update(bookingId, input);
+    setBookings((current) => current.map((item) => item.id === booking.id ? booking : item));
+    return booking;
+  }
+  async function createTechnician(input: Omit<Technician, 'id' | 'initials' | 'currentLoad'>) {
+    const technician = await technicianRepository.create(input);
+    setTechnicians((current) => [...current, technician]);
+    return technician;
+  }
+  async function updateTechnician(id: string, input: Omit<Technician, 'id' | 'initials' | 'currentLoad'>) {
+    const technician = await technicianRepository.update(id, input);
+    setTechnicians((current) => current.map((item) => item.id === id ? technician : item));
+    return technician;
+  }
 
   function technicianName(technicianId?: string) {
     return technicians.find((technician) => technician.id === technicianId)?.name ?? '';
   }
-  return <BookingContext.Provider value={{ bookings, technicians, status, error, assignmentBookingId, assignmentError, retry, assignTechnician, createBooking, technicianName }}>{children}</BookingContext.Provider>;
+  return <BookingContext.Provider value={{ bookings, technicians, status, error, assignmentBookingId, assignmentError, retry, assignTechnician, createBooking, cancelBooking, transitionBooking, updateBooking, createTechnician, updateTechnician, technicianName }}>{children}</BookingContext.Provider>;
 }
 
 export function useBookings() {

@@ -1,0 +1,1 @@
+:root{--font-ops:"Avenir Next",Avenir,"Helvetica Neue",Helvetica,Arial,sans-serif}body,button,input,select,textarea{font-family:var(--font-ops)}.page-header h1,.login-page h1,.panel h2,.brand strong{font-family:var(--font-ops);font-weight:700}.eyebrow,.brand small,.sidebar-status small{font-family:"SF Mono",SFMono-Regular,Consolas,monospace}

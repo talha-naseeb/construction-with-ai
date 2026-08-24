@@ -15,7 +15,7 @@ describe('form validation', () => {
   });
 
   it('requires the booking intake details before creating a local booking', () => {
-    expect(bookingSchema.safeParse({ customer: 'Alex', phone: '(512) 555-0198', service: 'Kitchen remodel', address: '123 Maple Dr', startAt: '2026-08-24T10:00', notes: 'Cabinet and countertop estimate' }).success).toBe(true);
-    expect(bookingSchema.safeParse({ customer: '', phone: '', service: '', address: '', startAt: '', notes: '' }).success).toBe(false);
+    expect(bookingSchema.safeParse({ customer: 'Alex', phone: '(512) 555-0198', email: 'alex@example.com', propertyType: 'Residential home', service: 'Kitchen remodel', address: '123 Maple Dr', startAt: '2026-08-24T10:00', notes: 'Cabinet and countertop estimate' }).success).toBe(true);
+    expect(bookingSchema.safeParse({ customer: '', phone: '', email: 'not-an-email', propertyType: '', service: '', address: '', startAt: '', notes: '' }).success).toBe(false);
   });
 });

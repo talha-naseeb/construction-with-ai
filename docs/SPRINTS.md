@@ -191,9 +191,9 @@ Update this table at each sprint review. A sprint is not complete until the clie
 
 | Sprint | Scope signed off | Automated tests | Build | Manual test | Client approval | Notes |
 |---|---|---|---|---|---|---|
-| 01 | In progress | Passed | Passed | Pending | Pending | Foundation work is underway; approval has not been requested. |
-| 02 | In progress | Passed | Passed | Pending | Pending | Calls list and call-detail review are implemented; lead workflow remains. |
-| 03 | Pending | Pending | Pending | Pending | Pending | |
-| 04 | Pending | Pending | Pending | Pending | Pending | |
-| 05 | Pending | Pending | Pending | Pending | Pending | |
-| 06 | Pending | Pending | Pending | Pending | Pending | |
+| 01 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; booking lifecycle and technician profile workflows are ready for approval. |
+| 02 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; call search/outcome filtering and lead source-call context are ready for approval. |
+| 03 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; lead-to-booking, lifecycle, cancellation, and assignment warning paths are ready for approval. |
+| 04 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; customer history and job workflow screens are ready for approval. |
+| 05 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; dashboard, analytics, and settings use explicit mock-data boundaries. |
+| 06 | Ready for approval | Passed | Passed | Passed | Pending | Manual testing completed; API contract and Retell checklist are ready for approval. |
