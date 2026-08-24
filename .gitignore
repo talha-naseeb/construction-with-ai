@@ -1,5 +1,6 @@
 node_modules
 .next
+backend/dist
 *.tsbuildinfo
 .DS_Store
 .vercel
@@ -8,5 +9,8 @@ node_modules
 .env.development
 .env.staging
 .env.production
+!.env.example
+!.env.*.example
+.env*
 !.env.example
 !.env.*.example
