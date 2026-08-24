@@ -1,0 +1,4 @@
+import { notFound } from 'next/navigation';
+import { LeadWorkflow } from '@/components/admin/lead-workflow';
+import { operationsRepository } from '@/lib/operations-repository';
+export default async function LeadDetail({ params }: { params: Promise<{ leadId: string }> }) { const lead = operationsRepository.getLead((await params).leadId); if (!lead) notFound(); return <><header className="page-header"><div><p className="eyebrow">Lead · {lead.id}</p><h1>{lead.customer}</h1></div></header><section className="detail-grid"><article className="panel"><dl className="details"><dt>Requested service</dt><dd>{lead.service}</dd><dt>Location</dt><dd>{lead.location}</dd><dt>Source</dt><dd>{lead.source}</dd><dt>Owner</dt><dd>{lead.owner}</dd><dt>Follow-up</dt><dd>{lead.followUp}</dd></dl></article><LeadWorkflow lead={lead}/></section></>; }

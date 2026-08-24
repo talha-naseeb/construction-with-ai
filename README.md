@@ -25,3 +25,18 @@ npm run build
 ```
 
 The booking data is local demo state until the NestJS backend is connected.
+
+## Product delivery documents
+
+- [PRD](docs/PRD.md)
+- [Frontend delivery plan](docs/FRONTEND-PLAN.md)
+- [All sprints and approval gates](docs/SPRINTS.md)
+- [Sprint 01 detail](docs/SPRINT-01.md)
+- [Frontend implementation rules](rules/FRONTEND.md)
+
+## Environments
+
+- **Staging:** Vercel Preview deployments. Copy `.env.staging.example` to `.env.staging` for local staging checks.
+- **Production:** Vercel Production deployments. Copy `.env.production.example` to `.env.production` only when you need a local production-like build.
+
+Environment files with real values are ignored by Git. Do not put Retell keys, backend secrets, or database credentials in `NEXT_PUBLIC_*` variables.

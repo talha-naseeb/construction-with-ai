@@ -1,0 +1,10 @@
+import Link from 'next/link';
+import { operationsRepository } from '@/lib/operations-repository';
+
+export default async function CallDetailPage({ params }: { params: Promise<{ callId: string }> }) {
+  const { callId } = await params;
+  const call = operationsRepository.getCall(callId);
+  if (!call) return <section className="empty-state panel"><h1>Call not found</h1><p>This call may no longer be available in the local demo data.</p><Link href="/calls" className="button primary">Back to calls</Link></section>;
+  const followUp = call.outcome === 'Lead created' ? { href: '/leads', label: 'Open lead queue' } : call.outcome === 'Booking created' ? { href: '/bookings', label: 'Review booking' } : null;
+  return <><header className="page-header"><div><p className="eyebrow">Call review · {call.id}</p><h1>{call.customer}</h1><p className="page-subtitle">{call.startedAt} · {call.duration} · {call.phone}</p></div><Link href="/calls" className="button">← Back to calls</Link></header><section className="detail-grid"><article className="panel detail-panel"><div className="panel-header"><div><p className="eyebrow">Conversation</p><h2>{call.service}</h2></div><span className={`pill ${call.outcome === 'Booking created' ? 'success' : call.outcome === 'Lead created' ? 'amber' : 'muted-pill'}`}>{call.outcome}</span></div><div className="transcript">{call.transcript.map((line, index) => <div className={`transcript-line ${line.speaker === 'Retell' ? 'agent' : 'caller'}`} key={`${line.speaker}-${index}`}><span>{line.speaker}</span><p>{line.text}</p></div>)}</div></article><aside className="panel call-summary"><p className="eyebrow">AI summary</p><h2>Review before action</h2><p>{call.summary}</p><dl className="details compact-details"><dt>Verification</dt><dd>{call.verification}</dd><dt>Call outcome</dt><dd>{call.outcome}</dd><dt>Recording</dt><dd>Unavailable in demo</dd></dl>{followUp ? <Link className="button primary wide" href={followUp.href}>{followUp.label} →</Link> : <p className="notice inline-notice">No automatic follow-up is available. An admin should review this result.</p>}</aside></section></>;
+}

@@ -1,14 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { initialBookings } from './mock-data';
-import { bookingStatus, jobSummary } from './booking-utils';
+import { bookingFixtures } from './mock-data';
+import { bookingStatus, formatBookingSchedule, jobSummary } from './booking-utils';
 
 describe('booking utilities', () => {
   it('marks unassigned work clearly for the admin', () => {
-    expect(bookingStatus(initialBookings[0])).toBe('Needs assignment');
+    expect(bookingStatus(bookingFixtures[0])).toBe('Pending review');
   });
 
   it('builds a share-ready summary with customer details', () => {
-    expect(jobSummary(initialBookings[0])).toContain('Alex Johnson');
-    expect(jobSummary(initialBookings[0])).toContain('123 Maple Dr');
+    expect(jobSummary(bookingFixtures[0])).toContain('Alex Johnson');
+    expect(jobSummary(bookingFixtures[0])).toContain('123 Maple Dr');
+  });
+
+  it('formats canonical booking timestamps in the booking timezone', () => {
+    expect(formatBookingSchedule(bookingFixtures[0])).toContain('10:00 AM');
   });
 });

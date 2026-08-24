@@ -1,25 +1,71 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
-import { initialBookings, technicians } from '@/lib/mock-data';
-import type { Booking } from '@/lib/types';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { bookingRepository } from '@/lib/repositories/booking-repository';
+import { technicianRepository } from '@/lib/repositories/technician-repository';
+import type { Booking, Technician } from '@/lib/types';
 
 type BookingContextValue = {
   bookings: Booking[];
-  assignTechnician: (bookingId: string, technicianId: string) => void;
+  technicians: Technician[];
+  status: 'loading' | 'ready' | 'error';
+  error: string | null;
+  assignmentBookingId: string | null;
+  assignmentError: string | null;
+  retry: () => Promise<void>;
+  assignTechnician: (bookingId: string, technicianId: string) => Promise<void>;
+  createBooking: (input: Omit<Booking, 'id' | 'endAt' | 'timezone'>) => Promise<Booking>;
   technicianName: (technicianId?: string) => string;
 };
 const BookingContext = createContext<BookingContextValue | null>(null);
 
 export function BookingProvider({ children }: { children: React.ReactNode }) {
-  const [bookings, setBookings] = useState(initialBookings);
-  function assignTechnician(bookingId: string, technicianId: string) {
-    setBookings((current) => current.map((booking) => booking.id === bookingId ? { ...booking, technicianId } : booking));
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [technicians, setTechnicians] = useState<Technician[]>([]);
+  const [status, setStatus] = useState<BookingContextValue['status']>('loading');
+  const [error, setError] = useState<string | null>(null);
+  const [assignmentBookingId, setAssignmentBookingId] = useState<string | null>(null);
+  const [assignmentError, setAssignmentError] = useState<string | null>(null);
+
+  async function retry() {
+    setStatus('loading');
+    setError(null);
+    try {
+      const [nextBookings, nextTechnicians] = await Promise.all([bookingRepository.list(), technicianRepository.list()]);
+      setBookings(nextBookings);
+      setTechnicians(nextTechnicians);
+      setStatus('ready');
+    } catch {
+      setStatus('error');
+      setError('We could not load bookings. Please try again.');
+    }
   }
+
+  useEffect(() => { void retry(); }, []);
+
+  async function assignTechnician(bookingId: string, technicianId: string) {
+    setAssignmentBookingId(bookingId);
+    setAssignmentError(null);
+    try {
+      const booking = await bookingRepository.assignTechnician(bookingId, technicianId);
+      setBookings((current) => current.map((item) => item.id === booking.id ? booking : item));
+    } catch (cause) {
+      setAssignmentError(cause instanceof Error ? cause.message : 'We could not assign this technician. Please try again.');
+      throw cause;
+    } finally {
+      setAssignmentBookingId(null);
+    }
+  }
+  async function createBooking(input: Omit<Booking, 'id' | 'endAt' | 'timezone'>) {
+    const booking = await bookingRepository.create(input);
+    setBookings((current) => [booking, ...current]);
+    return booking;
+  }
+
   function technicianName(technicianId?: string) {
     return technicians.find((technician) => technician.id === technicianId)?.name ?? '';
   }
-  return <BookingContext.Provider value={{ bookings, assignTechnician, technicianName }}>{children}</BookingContext.Provider>;
+  return <BookingContext.Provider value={{ bookings, technicians, status, error, assignmentBookingId, assignmentError, retry, assignTechnician, createBooking, technicianName }}>{children}</BookingContext.Provider>;
 }
 
 export function useBookings() {

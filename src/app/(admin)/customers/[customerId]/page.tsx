@@ -1,0 +1,4 @@
+import { notFound } from 'next/navigation';
+import { RecordDetail } from '@/components/admin/record-detail';
+import { operationsRepository } from '@/lib/operations-repository';
+export default async function CustomerDetail({ params }: { params: Promise<{ customerId: string }> }) { const customer = operationsRepository.getCustomer((await params).customerId); if (!customer) notFound(); return <RecordDetail eyebrow={`Customer · ${customer.id}`} title={customer.name} backHref="/customers" backLabel="customers" rows={[["Phone", customer.phone], ["Email", customer.email], ["Verification", customer.verification], ["Active work", customer.activeWork], ["Last contact", customer.lastContact]]} note="The backend decides which customer information this signed-in admin may view. Sensitive changes require step-up verification." />; }
