@@ -1,42 +1,27 @@
 # Retell Construction Admin
 
-Next.js front end for the single-admin construction calling-agent platform.
+This workspace separates the production applications and shared delivery material.
 
-## Current scope
+```text
+retell-admin/
+├── frontend/   Next.js admin dashboard
+├── backend/    NestJS API and Drizzle database schema
+├── docs/       Product, sprint, API, and architecture records
+└── rules/      Shared implementation and quality rules
+```
 
-- Admin sign-in interface with validation
-- Dashboard shell and overview
-- Booking list, detail, manual technician assignment, and share-ready job details
-- Technician records (no technician accounts)
-- Responsive UI, toast feedback, error boundaries, and unit tests
-
-## Start locally
+## Run the frontend
 
 ```bash
-npm install
+cd frontend
 npm run dev
 ```
 
-## Verify
+## Run the backend
 
 ```bash
-npm test
-npm run build
+cd backend
+npm run start:dev
 ```
 
-The booking data is local demo state until the NestJS backend is connected.
-
-## Product delivery documents
-
-- [PRD](docs/PRD.md)
-- [Frontend delivery plan](docs/FRONTEND-PLAN.md)
-- [All sprints and approval gates](docs/SPRINTS.md)
-- [Sprint 01 detail](docs/SPRINT-01.md)
-- [Frontend implementation rules](rules/FRONTEND.md)
-
-## Environments
-
-- **Staging:** Vercel Preview deployments. Copy `.env.staging.example` to `.env.staging` for local staging checks.
-- **Production:** Vercel Production deployments. Copy `.env.production.example` to `.env.production` only when you need a local production-like build.
-
-Environment files with real values are ignored by Git. Do not put Retell keys, backend secrets, or database credentials in `NEXT_PUBLIC_*` variables.
+The Vercel project is configured to deploy the `frontend/` directory. The backend uses the Neon PostgreSQL integration configured for this workspace.

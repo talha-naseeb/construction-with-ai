@@ -9,7 +9,7 @@ This plan deliberately completes the user experience before API integration. Eve
 - Replace direct mock-data imports in pages with typed feature repositories.
 - Define a shared `AsyncState` convention: loading, data, empty, error, retry.
 
-**Exit criteria:** `npm test` and `npm run build` pass; no generated files are part of planned source changes.
+**Exit criteria:** from `frontend/`, `npm test` and `npm run build` pass; no generated files are part of planned source changes.
 
 ## Phase 1 — Shared app foundation
 

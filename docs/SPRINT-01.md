@@ -32,7 +32,7 @@
 ## Acceptance criteria
 
 - [x] `npm test` passes.
-- [x] `npm run build` passes.
+- [x] From `frontend/`, `npm run build` passes.
 - [x] The booking and technician UI use typed feature repositories, not direct imports from `mock-data.ts`.
 - [x] Assignment can show loading, success, validation error, and recoverable service-error UI states.
 - [ ] A missing booking produces a useful not-found experience.

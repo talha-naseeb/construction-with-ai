@@ -1,7 +1,7 @@
 # Implementation Status
 
 **Last updated:** 24 August 2026  
-**Scope:** Frontend-only mock implementation. No backend, Retell connection, authentication enforcement, or real customer data is in scope yet.
+**Scope:** Frontend release candidate plus backend foundation. Authentication, Retell connection, and live operational data are not implemented yet.
 
 ## Current position
 
@@ -13,6 +13,7 @@
 | Sprint 04 — Customers, jobs, services | Ready for client test | Customer related history, job workflow/cancellation/notes, and controlled service catalogue views are implemented. |
 | Sprint 05 — Dashboard and resilience | Ready for client test | Dashboard, analytics, settings, security, not-found, and recovery views are available with explicit local-data boundaries. |
 | Sprint 06 — Hardening and handoff | Ready for client test | Shared UI migration, responsive work, automated checks, API contract, and Retell integration checklist are ready for review. |
+| Backend foundation | Complete | NestJS API, Neon PostgreSQL, versioned Drizzle schema, initial migration, health endpoint, tests, and production build are in place on `codex/backend-foundation`. |
 
 ## Completed in this session
 
@@ -22,12 +23,15 @@
 - Removed navigation links to routes that have no intentional destination.
 - Ran `npm run build` and `npm test` successfully after each implemented workflow.
 - Manual preview testing was completed by the client and the current code was pushed to `main`.
+- Provisioned the Neon PostgreSQL integration through Vercel and applied the initial database migration.
+- Added the NestJS backend foundation, database health endpoint, and schema for customers, properties, services, technicians, calls, leads, bookings, and jobs.
+- Verified the backend with unit tests and a production build.
 
 ## Active next work
 
-1. Obtain explicit client approval for the frontend release candidate.
-2. Log any approval notes or follow-up fixes.
-3. Start backend work only after the client accepts the frontend release candidate.
+1. Implement the first authenticated API modules against the established schema.
+2. Replace frontend mock repositories incrementally as each API module is ready.
+3. Obtain final client approval after the integrated application is ready for review.
 
 ## Approval rule
 
